@@ -33,7 +33,10 @@ public class PlayerManager {
     public Dictionary<string, Texture2D> imageCollections = new Dictionary<string, Texture2D>();
     public int animFPS = 1;
 }
-
+public class DownloadInfo {
+    public string Name;
+    public float Progress;
+}
 public class DownloadManager : MonoBehaviour
 {
     public static DownloadManager Instance { get; private set; }
@@ -55,6 +58,10 @@ public class DownloadManager : MonoBehaviour
     public string yourName="赞美太阳";
 
     public Slider seqSlider, talSlider;
+
+    public Text downloadProgress;
+
+    private List<DownloadInfo> downloadInfos = new List<DownloadInfo>();
 
     private int FPSCount = 0;
     private float FrameCount = 0;
@@ -124,6 +131,11 @@ public class DownloadManager : MonoBehaviour
     {
        
         string url = string.Format("https://static-r.kamihimeproject.net/scenarios/c2d/c46/{0}/{1}", contentFolderName, path);
+
+        DownloadInfo info = new DownloadInfo();
+        info.Name = url;
+        info.Progress = 0;
+        downloadInfos.Add(info);
         float Progess = 0;
         string Info = "";
         if (isImage)
@@ -133,9 +145,8 @@ public class DownloadManager : MonoBehaviour
             while (!www.isDone)
             {
                 Progess = www.progress;
+                info.Progress = Progess;
                 yield return null;
-                Info = string.Format("Content Downloaded: url - {0} , isImage - {1} , Progress - {2}", url, isImage.ToString(), Progess.ToString());
-                Message.text = Info;
             }
            
             playerManager.imageCollections.Add(path, www.texture);
@@ -143,6 +154,10 @@ public class DownloadManager : MonoBehaviour
             {
                 Debug.LogError(www.error);
                 Message.text = www.error;
+            }
+
+            if (www.isDone) {
+                downloadInfos.Remove(info);
             }
             
         }
@@ -154,8 +169,6 @@ public class DownloadManager : MonoBehaviour
             while (!www.isDone) {
                 Progess = www.downloadProgress;
                 yield return null;
-                Info = string.Format("Content Downloaded: url - {0} , isImage - {1} , Progress - {2}", url, isImage.ToString(), Progess.ToString());
-                Message.text = Info;
             }
             
             if (www.isNetworkError || www.isHttpError)
@@ -176,6 +189,10 @@ public class DownloadManager : MonoBehaviour
                 var clip = AudioClip.Create("foo", samples.Length, mpgFile.Channels, mpgFile.SampleRate, false);
                 clip.SetData(samples, 0);
                 playerManager.voiceClips.Add(path, clip); // source.clip = clip;
+            }
+            if (www.isDone)
+            {
+                downloadInfos.Remove(info);
             }
         }
 
@@ -255,7 +272,17 @@ public class DownloadManager : MonoBehaviour
         }
     }
     private void Update()
-    { 
+    {
+        downloadProgress.gameObject.SetActive(downloadInfos.Count != 0);
+        if (downloadInfos.Count != 0)
+        {
+            downloadProgress.text = "";
+            foreach (var info in downloadInfos)
+            {
+                downloadProgress.text +="Downloading "+ info.Name + " - " + (info.Progress*100.0f).ToString("f2") + "%\r\n";
+            }
+        }
+
         float FPS = playerManager.animFPS;
         if (FPS != 1) {
             FrameCount+=Time.deltaTime;
