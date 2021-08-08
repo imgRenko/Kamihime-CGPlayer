@@ -46,17 +46,32 @@ function check() {
 function check2() {
   var x = document.getElementById('pid').value;
     var type = document.getElementById("ctype").value;
+	var donloadr18text = document.getElementById("check").checked;
   if (x == "") {
     alert("空ID");
    
   }else{
-	var Final = blowfish.encrypt(type+x+"-H","bLoWfIsH",{ //
+	var Final = blowfish.encrypt(type+x+(donloadr18text?"-S": "-H"),"bLoWfIsH",{ //
             outputType: 1,
             cipherMode: 0
         })
-		document.getElementById("p").innerHTML = "https://static-r.kamihimeproject.net/scenarios/" + getPath2(Final)+"/scenario.json";
-		document.getElementById("p").href = "https://static-r.kamihimeproject.net/scenarios/" + getPath2(Final)+"/scenario.json";
+		var p =(donloadr18text?"/scenario/first.ks":"/scenario.json");
+		document.getElementById("p").innerHTML = "https://static-r.kamihimeproject.net/scenarios/" + getPath2(Final)+p;
+		document.getElementById("p").href = "https://static-r.kamihimeproject.net/scenarios/" + getPath2(Final)+p;
 		document.getElementById("c").innerHTML =Final;
+  }
+}
+function check3() {
+  var x = document.getElementById('gid').value;
+  if (x == "") {
+    alert("空ID");
+   
+  }else{
+	var Final = blowfish.decrypt(x,"bLoWfIsH",{ //
+            outputType: 1,
+            cipherMode: 0
+        })
+		alert(Final);
   }
 }
 
@@ -66,26 +81,35 @@ function check2() {
 <h1>Kamihime (DMM)游戏资源 AES 解算器</h1>
 <h2>这啥玩意？</h2>
 <h4>解包过Kamihime的立绘过吗？注意到文件名都是一堆乱码吗？此页面可以帮助你把乱码翻译回来，如此一来只需要知道角色对应的ID，就可以定位资源了，从而解包。</h4>
-<br>
+<h2>有对应繁中，英语的版本吗？</h2>
+<h4>没有，但提取原理可能相同，你可以更改此页面文件实现，但有一个麻烦的问题是AES的密匙很可能各版本都不相同</h4>
 <hr>
-H文件夹路径计算：<input type="text" id="pid">  
+
+调试用密文：<input type="text" id="gid">  <button onclick="check3()">提交</button>
+<hr>
+剧情文本路径计算：<input type="text" id="pid">  
 <select name="Select1" id="ctype">
 		<option value="character_">神姬</option>
 		<option value="summon_">幻兽</option>
 		<option value="job_">英灵</option>
 	</select>
+<input type="checkbox" id="check" >读取非R18文本</input>
 <button onclick="check2()">提交</button>
 <br>这里要写角色Id+场景ID-2，因此不能填四位数，要写场景序号，例如要提取角色[紅醇麗姫]ティシュトリヤ的H CG场景在这里可以写5163-3-2（因为她对应的角色ID是5163，后面的-2每个角色都有 要保留下来），如果ID不正确可能会有404问题，或者找到文件对应的不是你想要的角色，修改数值多试几次。最后推荐右键保存json文件<br>
-<hr>
-<h3>点击提交按钮得到一个json文件链接，这个json文件有什么用？</h3><br>
-这个json文件描述了H场景的所有内容，使用此json文件作为索引，可以拿到H场景有关的所有CG，文本以及语音。拥有了这些数据就可以制作一个H场景阅读器，离线阅读，不用跑DMM登录kamihime了。（但是这个json文件不是标准的，相对于标准json有语法错误，需要修改后才能在一些要求极其严格的json插件中使用）
 <hr>
 <a href="" id="p">scenarios json</a>
 <br>
 数据文件夹名称（将其填入H Scene查阅器可以直接查阅该角色的H Scene内容）：<a id="c"></a>
 <hr>
-<br>
-<h3>怎么样才能得到角色的ID？</h3><br>
+<h3>不勾选读取非R18文本，点击提交按钮得到一个json文件链接，这个json文件有什么用？</h3>
+这个json文件描述了H场景的所有内容，使用此json文件作为索引，可以拿到H场景有关的所有CG，文本以及语音。拥有了这些数据就可以制作一个H场景阅读器，离线阅读，不用跑DMM登录kamihime了。（但是这个json文件不是标准的，相对于标准json有语法错误，需要修改后才能在一些要求极其严格的json插件中使用）
+<h3>勾选读取非R18文本，点击提交按钮得到一个ks文件链接，这个ks文件有什么用？</h3>
+ks文件是kamihime用于读取剧情的文本，其中有语音，立绘文件的相关路径信息，要下载立绘，使用下面的链接
+https://static-r.kamihimeproject.net/scenarios/fgimage/ks文件内的storage字段。<br>
+要下载立绘，使用下面的链接
+https://static-r.kamihimeproject.net/xxx/xxx/角色数据文件夹/sound/ks文件内playse storage字段。
+<hr>
+<h3>怎么样才能得到角色的ID？</h3>
 打开PC端游戏，随便点开一个ガチャ界面，然后中打开F12，然后选择开发工具的Network（在开发工具窗口的上侧），然后回到游戏按下“ガチャ详细”按钮，找到你感兴趣的角色，待角色详细信息面板加载完毕后，回到开发工具，寻找文件名只有三四位数的文件，那就是角色ID。
 <hr>
   填入角色ID：<input type="text" id="id">
