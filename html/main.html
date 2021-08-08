@@ -1,0 +1,92 @@
+<html>
+<head>
+<script type="text/javascript" src="encode.js"></script>
+
+<script>
+
+
+function getPath(t,p) {
+        var r = t.lastIndexOf(".")
+          , e = -1 < r ? t.substr(0, r) : t;
+        return [[-6, 3], [-3, 3]].map(function(t) {
+            return String.prototype.substr.apply(e, t)
+        }).join("/") + "/" + t + ((p.indexOf("illust") !== -1||p.indexOf("harem") !== -1) ? ".png" : ".jpg");
+}
+
+function getPath2(t) {
+        var r = t.lastIndexOf(".")
+          , e = -1 < r ? t.substr(0, r) : t;
+        return [[-6, 3], [-3, 3]].map(function(t) {
+            return String.prototype.substr.apply(e, t)
+        }).join("/") + "/" + t;
+}
+
+function check() {
+  var x = document.getElementById('id').value;
+  var type = document.getElementById("type").value;
+  var img =  document.getElementById("img");
+  var p = "_0"
+  if (type == "questimg_harem-chara-quest_" )
+	p="_1"
+  if (x == "") {
+    alert("空ID");
+   
+  }else{
+	var Final = blowfish.encrypt(type+x+p,"bLoWfIsH",{
+            outputType: 1,
+            cipherMode: 0
+        })
+		img.src = "https://static-r.kamihimeproject.net/resources/pc/normal/"+getPath(Final,type);
+		
+  }
+}
+function check2() {
+  var x = document.getElementById('pid').value;
+  if (x == "") {
+    alert("空ID");
+   
+  }else{
+	var Final = blowfish.encrypt("character_"+x+"-H","bLoWfIsH",{ //
+            outputType: 1,
+            cipherMode: 0
+        })
+		document.getElementById("p").innerHTML = "https://static-r.kamihimeproject.net/scenarios/" + getPath2(Final)+"/scenario.json";
+		document.getElementById("p").href = "https://static-r.kamihimeproject.net/scenarios/" + getPath2(Final)+"/scenario.json";
+		document.getElementById("c").innerHTML =Final;
+  }
+}
+
+</script>
+</head>
+<body>
+<h1>Kamihime 游戏资源 AES 解算器</h1>
+<h2>这啥玩意？</h2>
+<h4>解包过Kamihime的立绘过吗？注意到文件名都是一堆乱码吗？此页面可以帮助你把乱码翻译回来，如此一来只需要知道角色对应的ID，就可以定位资源了，从而解包。</h4>
+<hr>
+H文件夹计算：<input type="text" id="pid">  <button onclick="check2()">提交</button>
+<br>这里要写角色Id+场景ID-2，因此不能填四位数，要写场景序号，例如要提取角色[紅醇麗姫]ティシュトリヤ的H CG场景在这里可以写5163-3-2（因为她对应的角色ID是5163，后面的-2每个角色都有 要保留下来），如果ID不正确可能会有404问题，或者找到文件对应的不是你想要的角色，修改数值多试几次。最后推荐右键保存json文件<br>
+<hr>
+<h3>点击提交按钮得到一个json文件链接，这个json文件有什么用？</h3><br>
+这个json文件描述了H场景的所有内容，使用此json文件作为索引，可以拿到H场景有关的所有CG，文本以及语音。拥有了这些数据就可以制作一个H场景阅读器，离线阅读，不用跑DMM登录kamihime了。（但是这个json文件有语法错误，需要修改后才能使用）
+<hr>
+<a href="" id="p">scenarios json</a>
+<br>
+数据文件夹名称：<a id="c"></a>
+<hr>
+  填入角色ID：<input type="text" id="id">
+  <select name="Select1" id="type">
+		<option value="corecard_chara_">角色图标</option>
+		<option value="corecard_summon_">幻兽</option>
+		<option value="illust-com-kneeshot_chara_">角色立绘</option>
+		<option value="illust-com-kneeshot_summon_">幻兽立绘</option>
+		<option value="illustzoom_chara_">角色立绘全身</option>
+		<option value="illustzoom_summon_">幻兽立绘全身</option>
+		<option value="questimg_harem-chara-quest_">角色H场景缩略图</option>
+	</select>
+  <button onclick="check()">提交</button>
+  <br>少于四位数的id要在前边用0填充，例如角色[紅醇麗姫]ティシュトリヤ的ID是5163，那在选择框选择chara，然后在文本框填入5163，点击提交即可。
+  <br>
+  <hr>
+  <img src="" id ="img">
+</body>
+</html>
