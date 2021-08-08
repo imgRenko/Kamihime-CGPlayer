@@ -89,7 +89,7 @@ public class DownloadManager : MonoBehaviour
         {
             Destroy(gameObject);
         }
-        //StartCoroutine(DownloadImageTest());
+        //StartCoroutine(DownloadJsonTest());
         //
     }
     
@@ -105,12 +105,19 @@ public class DownloadManager : MonoBehaviour
     }
     public IEnumerator DownloadJsonTest()
     {
-        string url = jsonPath;
+        string url = string.Format("https://static-r.kamihimeproject.net/scenarios/c2d/c46/{0}/{1}", contentFolderName, "scenario.json");//jsonPath;
         WWW www = new WWW(url);
         yield return www;
-        Debug.Log("{\"sequence\":" + www.text + "}");
-        sequenceData = JsonUtility.FromJson<Sequence>("{\"sequence\":"+www.text+"}");
-
+        if (www.isDone)
+        {
+            string content = "{\"sequence\":" + www.text + "}";
+            content = content.Replace("},\n],}\n];", "}\n]}\n]");
+            content = content.Replace("},\n],},\n", "}\n]},\n");
+            content = content.Replace("\"words\":\"\",", "\"words\":\"\"");
+            content = content.Replace(",\n\n", "");
+            Debug.Log(content);
+            sequenceData = JsonUtility.FromJson<Sequence>(content);
+        }
     }
 
     public IEnumerator DownloadAsset(string path,bool isImage)
@@ -133,7 +140,10 @@ public class DownloadManager : MonoBehaviour
            
             playerManager.imageCollections.Add(path, www.texture);
             if (www.error != null)
+            {
                 Debug.LogError(www.error);
+                Message.text = www.error;
+            }
             
         }
         else
@@ -151,6 +161,7 @@ public class DownloadManager : MonoBehaviour
             if (www.isNetworkError || www.isHttpError)
             {
                 Debug.LogError(www.error);
+                Message.text = www.error;
             }
             else
             {
