@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Networking; 
@@ -33,6 +34,7 @@ public class PlayerManager {
     public Dictionary<string, Texture2D> imageCollections = new Dictionary<string, Texture2D>();
     public int animFPS = 1;
     public bool Opened = false;
+    public int maxFrame = 16;
 }
 public class DownloadInfo {
     public string Name;
@@ -69,6 +71,8 @@ public class DownloadManager : MonoBehaviour
 
     private int FPSCount = 0;
     private float FrameCount = 0;
+
+    private string localDirectory = Application.streamingAssetsPath;
 
     private void Awake()
     {
@@ -122,7 +126,28 @@ public class DownloadManager : MonoBehaviour
 
     public IEnumerator DownloadJsonTest()
     {
-        string url = string.Format("https://static-r.kamihimeproject.net/scenarios/c2d/c46/{0}/{1}", contentFolderName, "scenario.json");//jsonPath;
+ 
+
+        string kamihimeUrl = "https://static-r.kamihimeproject.net/scenarios/c2d/c46";
+
+        bool isCache = true;
+
+        string p = localDirectory + "/" + contentFolderName;
+
+        if (!Directory.Exists(p))
+        {
+            Directory.CreateDirectory(p);
+            isCache = false;
+        }
+        if (!File.Exists(p + "/scenario.json"))
+            isCache = false;
+
+
+        string url = string.Format("{0}/{1}/{2}", isCache ? localDirectory : kamihimeUrl,contentFolderName, "scenario.json"); //jsonPath;
+
+
+        if (isCache)
+            Debug.Log("从缓存读取" + url);
 
         DownloadInfo info = new DownloadInfo();
         info.Name = url;
@@ -152,15 +177,34 @@ public class DownloadManager : MonoBehaviour
             else
                 Message.text = "已经装载json文件，再点击一次下载按钮。";
 
+            if (isCache == false)
+                File.WriteAllText(string.Format("{0}/{1}/{2}", localDirectory, contentFolderName, "scenario.json"),www.text);
+
             sequenceData = JsonUtility.FromJson<Sequence>(content);
         }
     }
 
     public IEnumerator DownloadAsset(string path,bool isImage)
     {
-       
-        string url = string.Format("https://static-r.kamihimeproject.net/scenarios/c2d/c46/{0}/{1}", contentFolderName, path);
 
+
+        string kamihimeUrl = "https://static-r.kamihimeproject.net/scenarios/c2d/c46";
+
+        bool isCache = true;
+
+        string p = localDirectory + "/" + contentFolderName;
+
+        if (!Directory.Exists(p))
+        {
+            Directory.CreateDirectory(p);
+            isCache = false;
+        }
+        if (!File.Exists(p + "/" + path))
+            isCache = false;
+
+        string url = string.Format("{0}/{1}/{2}", isCache ? localDirectory : kamihimeUrl, contentFolderName, path);
+        if (isCache)
+            Debug.Log("从缓存读取" + url);
         DownloadInfo info = new DownloadInfo();
         info.Name = url;
         info.Progress = 0;
@@ -189,8 +233,10 @@ public class DownloadManager : MonoBehaviour
 
             if (www.isDone) {
                 downloadInfos.Remove(info);
+               
             }
-            
+            if (isCache == false)
+                File.WriteAllBytes(string.Format("{0}/{1}/{2}", localDirectory, contentFolderName, path), www.bytes);
         }
         else
         {
@@ -210,7 +256,8 @@ public class DownloadManager : MonoBehaviour
             }
             else
             {
-               
+                if (isCache == false)
+                    File.WriteAllBytes(string.Format("{0}/{1}/{2}", localDirectory, contentFolderName, path), www.downloadHandler.data);
                 // Or retrieve results as binary data
                 byte[] results = www.downloadHandler.data;
                 var memStream = new System.IO.MemoryStream(results);
@@ -286,7 +333,9 @@ public class DownloadManager : MonoBehaviour
             playerManager.imageCollections.TryGetValue(seqData.film, out output);
             sceneContent.texture = output;
             if (output.height < 1440)
-                sceneContent.uvRect = new Rect(0, 0, 1, 1);
+                playerManager.maxFrame = 1;
+            else
+                playerManager.maxFrame = 16;
            
            
         }
@@ -329,26 +378,25 @@ public class DownloadManager : MonoBehaviour
                 downloadProgress.text +="Downloading "+ info.Name + " - " + (info.Progress*100.0f).ToString("f2") + "%\r\n";
             }
         }
+        float avarrage = 1.0f / playerManager.maxFrame;
 
         float FPS = playerManager.animFPS;
+
         if (FPS != 1) {
             FrameCount+=Time.deltaTime;
             if (FrameCount >= 1.0f/ FPS)
             {
-
-
-                float avarrage = 1.0f / 16.0f;
-
-                if (FPSCount > 16)
-                {
+                if (FPSCount > playerManager.maxFrame)
                     FPSCount = 0;
-                }
-                sceneContent.uvRect = new Rect(0, FPSCount * avarrage, 1, 0.0625f);
                 FPSCount++;
-
                 FrameCount = 0;
             }
 
         }
+
+        if (playerManager.maxFrame != 1)
+            sceneContent.uvRect = new Rect(0, FPSCount * avarrage, 1, 0.0625f);
+        else
+            sceneContent.uvRect = new Rect(0, 0, 1, 1);
     }
 }
