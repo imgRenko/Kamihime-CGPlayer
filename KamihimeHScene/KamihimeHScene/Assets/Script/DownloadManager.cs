@@ -104,10 +104,13 @@ public class DownloadManager : MonoBehaviour
         {
             Destroy(gameObject);
         }
+        test();
         //StartCoroutine(DownloadJsonTest());
         //
     }
-    
+    public void test() {
+      
+    }
     public IEnumerator DownloadImage()
     {
         string url = "file:///C:/Users/imgRenko/Desktop/5178-2-2_c1.jpg";
@@ -126,9 +129,12 @@ public class DownloadManager : MonoBehaviour
 
     public IEnumerator DownloadJsonTest()
     {
- 
 
-        string kamihimeUrl = "https://static-r.kamihimeproject.net/scenarios/c2d/c46";
+
+        string index6 = contentFolderName.Substring(contentFolderName.Length - 6, 3);
+        string index3 = contentFolderName.Substring(contentFolderName.Length - 3, 3);
+
+        string kamihimeUrl = string.Format("https://static-r.kamihimeproject.net/scenarios/{0}/{1}", index6, index3);
 
         bool isCache = true;
 
@@ -188,7 +194,10 @@ public class DownloadManager : MonoBehaviour
     {
 
 
-        string kamihimeUrl = "https://static-r.kamihimeproject.net/scenarios/c2d/c46";
+        string index6 = contentFolderName.Substring(contentFolderName.Length - 6, 3);
+        string index3 = contentFolderName.Substring(contentFolderName.Length - 3, 3);
+
+        string kamihimeUrl = string.Format( "https://static-r.kamihimeproject.net/scenarios/{0}/{1}", index6, index3);
 
         bool isCache = true;
 
