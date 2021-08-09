@@ -477,10 +477,12 @@ MonoBehaviour:
     sequence: []
   contentFolderName: 7b40b24d2302fe134302cd6338596392f35e8ff45bc2dc46
   jsonPath: file:///C:/Users/imgRenko/Desktop/test.json
-  yourName: "\u8D5E\u7F8E\u592A\u9633"
   seqSlider: {fileID: 1664305658}
   talSlider: {fileID: 614862370}
+  yourName: "\u8D5E\u7F8E\u592A\u9633"
   downloadProgress: {fileID: 822059663}
+  closeButton: {fileID: 1252489819}
+  downloadButton: {fileID: 1775202466}
 --- !u!82 &416011291
 AudioSource:
   m_ObjectHideFlags: 0
@@ -1717,8 +1719,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: -830.7, y: -423.2}
-  m_SizeDelta: {x: 1103.5161, y: 846.41455}
+  m_AnchoredPosition: {x: -797, y: -553.29}
+  m_SizeDelta: {x: 1170.9658, y: 1106.5883}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &822059663
 MonoBehaviour:
