@@ -132,6 +132,7 @@ public class DownloadManager : MonoBehaviour
         WWW www = new WWW(url);
         yield return www;
   
+        
 
         if (www.isDone)
         {
@@ -141,7 +142,7 @@ public class DownloadManager : MonoBehaviour
             content = content.Replace("\"words\":\"\",", "\"words\":\"\"");
             content = content.Replace(",\n\n", "");
             Debug.Log(content);
-            sequenceData = JsonUtility.FromJson<Sequence>(content);
+            
             downloadInfos.Remove(info);
             if (www.error != null)
             {
@@ -151,6 +152,7 @@ public class DownloadManager : MonoBehaviour
             else
                 Message.text = "已经装载json文件，再点击一次下载按钮。";
 
+            sequenceData = JsonUtility.FromJson<Sequence>(content);
         }
     }
 
