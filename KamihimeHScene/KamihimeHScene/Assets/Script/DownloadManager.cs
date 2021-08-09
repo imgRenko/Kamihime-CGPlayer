@@ -61,7 +61,7 @@ public class DownloadManager : MonoBehaviour
     [HideInInspector]
     public Slider seqSlider, talSlider;
 
-    public string yourName = "赞美太阳";
+    public string yourName = "Master";
 
     public Text downloadProgress;
 
@@ -395,7 +395,7 @@ public class DownloadManager : MonoBehaviour
         }
 
         if (playerManager.maxFrame != 1)
-            sceneContent.uvRect = new Rect(0, FPSCount * avarrage, 1, 0.0625f);
+            sceneContent.uvRect = new Rect(0, 1-FPSCount * avarrage, 1, 0.0625f);
         else
             sceneContent.uvRect = new Rect(0, 0, 1, 1);
     }

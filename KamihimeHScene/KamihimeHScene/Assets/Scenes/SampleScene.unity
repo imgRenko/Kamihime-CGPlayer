@@ -479,7 +479,7 @@ MonoBehaviour:
   jsonPath: file:///C:/Users/imgRenko/Desktop/test.json
   seqSlider: {fileID: 1664305658}
   talSlider: {fileID: 614862370}
-  yourName: "\u8D5E\u7F8E\u592A\u9633"
+  yourName: Master
   downloadProgress: {fileID: 822059663}
   closeButton: {fileID: 1252489819}
   downloadButton: {fileID: 1775202466}
