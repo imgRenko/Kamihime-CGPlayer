@@ -3224,7 +3224,7 @@ GameObject:
   - component: {fileID: 1594927919}
   - component: {fileID: 1594927918}
   m_Layer: 5
-  m_Name: Window
+  m_Name: DownloadWindow
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3258,8 +3258,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 595.6, y: 337.04}
-  m_SizeDelta: {x: 408.80328, y: 368.46118}
+  m_AnchoredPosition: {x: 595.6, y: 329.48}
+  m_SizeDelta: {x: 408.80328, y: 383.57013}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1594927918
 MonoBehaviour:

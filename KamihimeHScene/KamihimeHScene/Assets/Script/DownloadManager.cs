@@ -3,7 +3,11 @@ using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 using UnityEngine.UI;
-using UnityEngine.Networking; 
+using UnityEngine.Networking;
+using System.Security.Cryptography;
+using System.Text;
+using System;
+
 [System.Serializable]
 public class TalkData
 {
@@ -104,13 +108,11 @@ public class DownloadManager : MonoBehaviour
         {
             Destroy(gameObject);
         }
-        test();
+      //  test();
         //StartCoroutine(DownloadJsonTest());
         //
     }
-    public void test() {
-      
-    }
+  
     public IEnumerator DownloadImage()
     {
         string url = "file:///C:/Users/imgRenko/Desktop/5178-2-2_c1.jpg";
@@ -217,7 +219,8 @@ public class DownloadManager : MonoBehaviour
         DownloadInfo info = new DownloadInfo();
         info.Name = url;
         info.Progress = 0;
-        downloadInfos.Add(info);
+     
+            downloadInfos.Add(info);
 
         float Progess = 0;
         string Info = "";
@@ -232,7 +235,7 @@ public class DownloadManager : MonoBehaviour
                 info.Progress = Progess;
                 yield return null;
             }
-           
+           if (playerManager.imageCollections.ContainsKey(path) == false)
             playerManager.imageCollections.Add(path, www.texture);
             if (www.error != null)
             {
@@ -241,7 +244,8 @@ public class DownloadManager : MonoBehaviour
             }
 
             if (www.isDone) {
-                downloadInfos.Remove(info);
+                
+                    downloadInfos.Remove(info);
                
             }
             if (isCache == false)
@@ -276,7 +280,8 @@ public class DownloadManager : MonoBehaviour
 
                 var clip = AudioClip.Create("voice", samples.Length, mpgFile.Channels, mpgFile.SampleRate, false);
                 clip.SetData(samples, 0);
-                playerManager.voiceClips.Add(path, clip); // source.clip = clip;
+                if (playerManager.voiceClips.ContainsKey(path) == false)
+                    playerManager.voiceClips.Add(path, clip); // source.clip = clip;
             }
             if (www.isDone)
             {
