@@ -19,7 +19,7 @@ The following describes the function usage here by taking the character 紅醇�
 ### IF YOU WANT TO GET AN ERO-SCENE-PICTURE
 - For example, to view the H scene thumbnail of 紅醇麗姫 - テシめトリヤ, you need to fill in 5163-3-2, "3" is the scene ID, you can fill it with '2' too.
 - However, it should be noted that if you want to view the ero scene thumbnail, you must bring the scene ID and the fixed character "-2"(Must be placed at the end).   
-
+- Example : 5163-3-2,5114-2-2,5099-3-2 (Format: CharacterID-SceneID-2)  
 ## Get Scenarios Json
 According to the above usage rules, you can do things below in order.
 - fill the ID in the second text box in the order of this HTML file, and click Submit button, you will get a link to scenarios json and a folder name.  
