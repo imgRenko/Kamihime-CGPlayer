@@ -49,9 +49,11 @@ public class DownloadManager : MonoBehaviour
     public static DownloadManager Instance { get; private set; }
 
     public PlayerManager playerManager = new PlayerManager();
+
     [SerializeField]
     public Sequence sequenceData;
     // 此处代码用作DEBUG，视编辑器后续更新而定，将此处的public设置为private
+
     public string contentFolderName;
 
     public string jsonPath = "file:///C:/Users/imgRenko/Desktop/test.json";
@@ -112,16 +114,20 @@ public class DownloadManager : MonoBehaviour
         //StartCoroutine(DownloadJsonTest());
         //
     }
-  
-    public IEnumerator DownloadImage()
+
+    private void Mirror(bool left) {
+        Vector3 sc = sceneContent.gameObject.transform.localScale;
+        sc.Scale(new Vector3(left ? -1 :1, 1, 1));
+        sceneContent.gameObject.transform.localScale = sc;
+    }
+
+    public void LeftMirror() {
+        Mirror(true);
+    }
+
+    public void TopMirror()
     {
-        string url = "file:///C:/Users/imgRenko/Desktop/5178-2-2_c1.jpg";
-
-        WWW www = new WWW(url);
-        yield return www;
-
-        sceneContent.texture = www.texture;
-
+        Mirror(false);
     }
 
     public void BanButton(bool Ban) {
@@ -181,25 +187,33 @@ public class DownloadManager : MonoBehaviour
             {
                 Debug.LogError(www.error);
                 Message.text = www.error;
-            }      
+            }
             else
+            {
                 Message.text = "已经装载json文件，再点击一次下载按钮。";
 
-            if (isCache == false)
-                File.WriteAllText(string.Format("{0}/{1}/{2}", localDirectory, contentFolderName, "scenario.json"),www.text);
-
-            sequenceData = JsonUtility.FromJson<Sequence>(content);
+                if (isCache == false)
+                    File.WriteAllText(string.Format("{0}/{1}/{2}", localDirectory, contentFolderName, "scenario.json"), www.text);
+            }
+            try
+            {
+                sequenceData = JsonUtility.FromJson<Sequence>(content);
+            }
+            catch (Exception exc)
+            {
+                Message.text = exc.Message;
+            }
         }
     }
 
-    public IEnumerator DownloadAsset(string path,bool isImage)
+    public IEnumerator DownloadAsset(string path, bool isImage)
     {
 
 
         string index6 = contentFolderName.Substring(contentFolderName.Length - 6, 3);
         string index3 = contentFolderName.Substring(contentFolderName.Length - 3, 3);
 
-        string kamihimeUrl = string.Format( "https://static-r.kamihimeproject.net/scenarios/{0}/{1}", index6, index3);
+        string kamihimeUrl = string.Format("https://static-r.kamihimeproject.net/scenarios/{0}/{1}", index6, index3);
 
         bool isCache = true;
 
@@ -219,8 +233,8 @@ public class DownloadManager : MonoBehaviour
         DownloadInfo info = new DownloadInfo();
         info.Name = url;
         info.Progress = 0;
-     
-            downloadInfos.Add(info);
+
+        downloadInfos.Add(info);
 
         float Progess = 0;
         string Info = "";
@@ -228,40 +242,45 @@ public class DownloadManager : MonoBehaviour
         if (isImage)
         {
             WWW www = new WWW(url);
-            
+
             while (!www.isDone)
             {
                 Progess = www.progress;
                 info.Progress = Progess;
                 yield return null;
             }
-           if (playerManager.imageCollections.ContainsKey(path) == false)
-            playerManager.imageCollections.Add(path, www.texture);
+            if (playerManager.imageCollections.ContainsKey(path) == false)
+                playerManager.imageCollections.Add(path, www.texture);
             if (www.error != null)
             {
                 Debug.LogError(www.error);
                 Message.text = www.error;
             }
+            else
+            {
 
-            if (www.isDone) {
-                
+                if (www.isDone)
+                {
+
                     downloadInfos.Remove(info);
-               
+
+                }
+                if (isCache == false)
+                    File.WriteAllBytes(string.Format("{0}/{1}/{2}", localDirectory, contentFolderName, path), www.bytes);
             }
-            if (isCache == false)
-                File.WriteAllBytes(string.Format("{0}/{1}/{2}", localDirectory, contentFolderName, path), www.bytes);
         }
         else
         {
-    
+
             UnityWebRequest www = UnityWebRequest.Get(url);
             yield return www.SendWebRequest();
-            while (!www.isDone) {
+            while (!www.isDone)
+            {
                 Progess = www.downloadProgress;
                 info.Progress = Progess;
                 yield return null;
             }
-            
+
             if (www.isNetworkError || www.isHttpError)
             {
                 Debug.LogError(www.error);
@@ -289,7 +308,7 @@ public class DownloadManager : MonoBehaviour
             }
         }
 
-         
+
     }
 
     public void Close() {
