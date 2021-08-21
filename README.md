@@ -39,7 +39,7 @@ crypto.outputTypes = {
 	Base64:0, Hex:1, String:2, Raw:3
 };
 
-// Encrypt with key bLoWfIsH
+// Encrypt with key bLoWfIsH (Method AES)
 var FinalText = blowfish.encrypt(type+x+p,"bLoWfIsH",{
             outputType: 1,
             cipherMode: 0
