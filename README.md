@@ -1,6 +1,6 @@
 # Kamihime-GameResource-Calculator
 
-The game resource file name is encrypted by AES, showing that the file name is very messy. This program decrypts the file path with the key, so that the resource path of CG can be obtained through the character ID, and then extract resources.  
+The game resource file name is encrypted by blowfish, showing that the file name is very messy. This program decrypts the file path with the key, so that the resource path of CG can be obtained through the character ID, and then extract resources.  
 And, this repo also attach with an ero scene viewer. If you have extracted game resources, you can use this viewer to view ero scene scenes without logging in to the game.
 
 # Usage
@@ -39,7 +39,7 @@ crypto.outputTypes = {
 	Base64:0, Hex:1, String:2, Raw:3
 };
 
-// Encrypt with key bLoWfIsH (Method AES)
+// Encrypt with key bLoWfIsH (Method blowfish)
 var FinalText = blowfish.encrypt(type+x+p,"bLoWfIsH",{
             outputType: 1,
             cipherMode: 0
