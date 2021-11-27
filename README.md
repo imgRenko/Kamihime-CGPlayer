@@ -1,4 +1,4 @@
-# Kamihime-GameResource-Calculator
+# Kamihime-ScenePlayer
 
 The game resource file name is encrypted by blowfish, showing that the file name is very messy. This program decrypts the file path with the key, so that the resource path of CG can be obtained through the character ID, and then extract resources.  
 And, this repo also attach with an ero scene viewer. If you have extracted game resources, you can use this viewer to view ero scene scenes without logging in to the game.
