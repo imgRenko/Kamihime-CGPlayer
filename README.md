@@ -25,6 +25,9 @@ According to the above usage rules, you can do things below in order.
 - fill the ID in the second text box in the order of this HTML file, and click Submit button, you will get a link to scenarios json and a folder name.  
 - if you want to view ero scene in the attached ero scene viewer, Fill the folder name into the text box of the viewer and click download button to view ero scene.  
 
+## About json language
+At present, it only supports Japanese (DMM). Nutaku and johren have different processing methods for the storage location of JSON files, but the contents are the same. You can try to replace the cached JSON files in order to change the language. The difference between CG files can also be solved in this way.
+
 # Resource Archive Method of Kamihime
 ``` js
 // part of Blowfish.js
