@@ -80,7 +80,7 @@ If you want to process these path in C#
     }
 ```
 The following code shows the original name of some image files after restoration
-```
+``` cs
      string mode = "";
      if (g[0] == "character")
         mode = "chara";
