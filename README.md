@@ -79,7 +79,18 @@ If you want to process these path in C#
         return cipherTextHex;
     }
 ```
-
+The following code shows the original name of some image files after restoration
+```
+     string mode = "";
+     if (g[0] == "character")
+        mode = "chara";
+     else if (g[0] == "summon")
+        mode = "summon";
+     else                
+        mode = "job";
+     string imageName = Crypted("corecard_"+ mode + "_" + ID + "_0")+".jpg";
+     string standName = Crypted("illustzoom_"+ mode+ "_" + ID + "_0") + ".png";
+```
 # Ref
 Blowfish.js from Dojo Toolkit 1.8.1  
 
