@@ -58,6 +58,27 @@ function getPath(t) {
 }
 
 ```
+If you want to process these path in C#
+``` cs
+ string Crypted(string key)
+    {
+        BlowFish algo;
+
+        algo = new BlowFish("624c6f5766497348");
+
+        List<byte> clearBytes = new List<byte>(Encoding.ASCII.GetBytes(key));
+        int needPaddingBytes = 8 - (clearBytes.Count % 8);
+
+        // add them 
+        clearBytes.AddRange(Enumerable.Repeat((byte)needPaddingBytes, needPaddingBytes));
+
+        byte[] cipherText = algo.Encrypt_ECB(clearBytes.ToArray());
+
+        // add byte and comptele 8 bit combo.
+        string cipherTextHex = BitConverter.ToString(cipherText).Replace("-", "").ToLowerInvariant();
+        return cipherTextHex;
+    }
+```
 
 # Ref
 Blowfish.js from Dojo Toolkit 1.8.1  
